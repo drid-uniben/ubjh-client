@@ -759,7 +759,7 @@ export default function ManuscriptSubmissionPage() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Email Address
+                        Email Address *
                       </label>
                       <input
                         type="email"
@@ -773,7 +773,7 @@ export default function ManuscriptSubmissionPage() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Faculty/Department
+                        Faculty/Department *
                       </label>
                       <input
                         type="text"
@@ -801,7 +801,7 @@ export default function ManuscriptSubmissionPage() {
 
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        ORCID iD
+                        ORCID iD *
                       </label>
                       <input
                         type="text"
