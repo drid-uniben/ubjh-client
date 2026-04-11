@@ -385,9 +385,7 @@ export default function ManuscriptSubmissionPage() {
                 <h3 className="font-semibold text-journal-maroon mb-2">What happens next?</h3>
                 <ul className="text-sm text-journal-maroon space-y-2 text-left">
                   <li>• You will receive a confirmation email shortly</li>
-                  <li>• Your login credentials will be sent within 24 hours</li>
-                  <li>• You can track your submission status from your author dashboard</li>
-                  <li>• Initial review typically takes 7-10 days</li>
+                  <li>• You can track your submission status from your author dashboard when your credentials is sent to you at an appropriate time</li>
                 </ul>
               </div>
               <button
@@ -449,7 +447,7 @@ export default function ManuscriptSubmissionPage() {
                 No Account Required
               </h3>
               <p className="text-sm text-journal-maroon">
-                You don&apos;t need to create an account to submit your manuscript. Simply fill out the form below, and an account will be automatically created for you. You&apos;ll receive your login credentials via email within 24 hours to 7 days to access your author dashboard and track your submission.
+                You don&apos;t need to create an account to submit your manuscript. Simply fill out the form below, and an account will be automatically created for you. You&apos;ll receive your login credentials via email at an appropriate time to access your author dashboard and track your submission.
               </p>
             </div>
           </div>
