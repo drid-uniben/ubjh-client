@@ -256,7 +256,6 @@ export default function AboutPage() {
                         </h3>
                         <p className="text-sm text-gray-700">
                           Editor-in-Chief assesses for scope and quality
-                          (7-10 days)
                         </p>
                       </div>
                     </div>

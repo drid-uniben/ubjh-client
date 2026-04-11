@@ -125,7 +125,7 @@ export default function SubmissionPortalPage() {
     {
       question: "What happens after I submit?",
       answer:
-        "You'll receive an email confirmation immediately. The Editor-in-Chief will conduct an initial assessment (7-10 days), then your manuscript will be sent for peer review if suitable. Typical timeline to first decision is 3-6 weeks.",
+        "You'll receive an email confirmation immediately. Your manuscript will undergo an initial assessment by the Editor-in-Chief, then it will be sent for peer review if suitable. Typical timeline to first decision is 3-6 weeks.",
     },
   ];
 
