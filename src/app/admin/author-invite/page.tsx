@@ -192,7 +192,9 @@ export default function AuthorInvitationsPage() {
     }
     if (!authorForm.orcid?.trim()) {
       errors.orcid = "ORCID is required";
-    } else if (!/^\d{4}-\d{4}-\d{4}-\d{4}$/.test(authorForm.orcid))
+    } else if (!/^\d{4}-\d{4}-\d{4}-\d{4}$/.test(authorForm.orcid)) {
+      errors.orcid = "Invalid ORCID format (0000-0000-0000-0000)";
+    }
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };

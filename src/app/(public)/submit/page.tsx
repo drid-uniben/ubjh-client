@@ -96,9 +96,15 @@ export default function ManuscriptSubmissionPage() {
       !currentCoAuthor.name ||
       !currentCoAuthor.email ||
       !currentCoAuthor.faculty ||
-      !currentCoAuthor.affiliation
+      !currentCoAuthor.affiliation ||
+      !currentCoAuthor.orcid
     ) {
-      toast.error('Please fill in all required fields (Name, Email, Faculty, Affiliation) for the co-author');
+      toast.error('Please fill in all required fields (Name, Email, Faculty, Affiliation, ORCID iD) for the co-author');
+      return;
+    }
+
+    if (!validateOrcid(currentCoAuthor.orcid)) {
+      toast.error('Please enter a valid ORCID iD for the co-author (format: 0000-0000-0000-0000)');
       return;
     }
 
@@ -801,7 +807,7 @@ export default function ManuscriptSubmissionPage() {
 
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        ORCID iD *
+                        ORCID iD * (Required)
                       </label>
                       <input
                         type="text"
