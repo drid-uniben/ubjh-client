@@ -17,7 +17,7 @@ import Header from "@/components/Header"
 import ArticleSearch from "@/components/ArticleSearch";
 import Footer from "@/components/Footer";
 import { publicationApi, PublishedArticle, Issue, Volume } from "@/services/api";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 
 export default function HumanitiesJournalHome() {
   const [currentIssueData, setCurrentIssueData] = useState<{
@@ -430,6 +430,7 @@ export default function HumanitiesJournalHome() {
         </div>
       </section>
       <Footer/>
+      <Toaster position="top-center" richColors />
     </div>
   );
 }
