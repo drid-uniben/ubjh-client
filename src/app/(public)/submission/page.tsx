@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { toast, Toaster } from "sonner";
 
 export default function SubmissionPortalPage() {
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
@@ -161,11 +160,7 @@ export default function SubmissionPortalPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toast.error("We aren't accepting manuscripts now");
-                }}
+                href="/submit"
                 className="inline-flex items-center gap-2 bg-white text-journal-maroon px-8 py-4 rounded-full font-bold hover:bg-journal-rose transition-all shadow-xl hover:shadow-2xl text-lg"
               >
                 <Send className="h-6 w-6" />
@@ -312,11 +307,7 @@ export default function SubmissionPortalPage() {
               <strong>Total estimated time:</strong> 15-20 minutes
             </p>
             <Link
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                toast.error("We aren't accepting manuscripts now");
-              }}
+              href="/submit"
               className="inline-flex items-center gap-2 bg-journal-maroon text-white px-8 py-4 rounded-full font-bold hover:bg-journal-maroon-dark transition-all shadow-xl text-lg"
             >
               Begin Submission Process
@@ -532,11 +523,7 @@ export default function SubmissionPortalPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                toast.error("We aren't accepting manuscripts now");
-              }}
+              href="/submit"
               className="inline-flex items-center gap-2 bg-white text-journal-maroon px-8 py-4 rounded-full font-bold hover:bg-journal-rose transition-all shadow-xl text-lg"
             >
               <Send className="h-6 w-6" />
@@ -578,7 +565,6 @@ export default function SubmissionPortalPage() {
 
       {/* Footer */}
       <Footer/>
-      <Toaster position="top-center" richColors />
     </div>
   );
 }
