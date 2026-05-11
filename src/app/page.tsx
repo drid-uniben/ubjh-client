@@ -17,7 +17,6 @@ import Header from "@/components/Header"
 import ArticleSearch from "@/components/ArticleSearch";
 import Footer from "@/components/Footer";
 import { publicationApi, PublishedArticle, Issue, Volume } from "@/services/api";
-import { toast, Toaster } from "sonner";
 
 export default function HumanitiesJournalHome() {
   const [currentIssueData, setCurrentIssueData] = useState<{
@@ -134,11 +133,7 @@ export default function HumanitiesJournalHome() {
             </div>
             <div className="block md:flex gap-4">
               <Link
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toast.error("We aren't accepting manuscripts now");
-                }}
+                href="/submission"
                 className="inline-flex mb-4 md:mb-0 items-center gap-2 text-sm md:text-md bg-white text-journal-maroon px-4 py-4 md:px-8 md:py-4 rounded-full font-bold hover:bg-journal-rose transition-all shadow-xl hover:shadow-2xl hover:scale-105"
               >
                 <FileText className="h-5 w-5" />
@@ -430,7 +425,7 @@ export default function HumanitiesJournalHome() {
         </div>
       </section>
       <Footer/>
-      <Toaster position="top-center" richColors />
+
     </div>
   );
 }
