@@ -578,6 +578,7 @@ export default function SubmissionPortalPage() {
 
       {/* Footer */}
       <Footer/>
+      <Toaster position="top-center" richColors />
     </div>
   );
 }

@@ -299,6 +299,7 @@ export default function Header() {
           </nav>
         </div>
       )}
+      <Toaster position="top-center" richColors />
     </header>
   );
 }
