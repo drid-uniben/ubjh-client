@@ -24,6 +24,8 @@ const STATUS_COLORS = {
   minor_revision: '#F97316',
   major_revision: '#DC2626',
   revised: '#06B6D4',
+  review_communicated: '#0D9488',
+  superseded: '#9CA3AF',
 };
 
 const STATUS_LABELS: { [key: string]: string } = {
@@ -35,6 +37,8 @@ const STATUS_LABELS: { [key: string]: string } = {
   minor_revision: 'Minor Revision',
   major_revision: 'Major Revision',
   revised: 'Revised',
+  review_communicated: 'Review Communicated',
+  superseded: 'Superseded',
 };
 
 export default function AdminDashboard() {

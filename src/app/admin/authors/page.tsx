@@ -152,6 +152,8 @@ useEffect(() => {
       minor_revision: { class: 'bg-orange-100 text-orange-800 border-orange-200', label: 'Minor Revision' },
       major_revision: { class: 'bg-orange-100 text-orange-800 border-orange-200', label: 'Major Revision' },
       revised: { class: 'bg-cyan-100 text-cyan-800 border-cyan-200', label: 'Revised' },
+      review_communicated: { class: 'bg-teal-100 text-teal-800 border-teal-200', label: 'Review Communicated' },
+      superseded: { class: 'bg-gray-100 text-gray-500 border-gray-200', label: 'Superseded' },
     };
     
     const config = statusConfig[status] || { class: 'bg-gray-100 text-gray-800 border-gray-200', label: status };
