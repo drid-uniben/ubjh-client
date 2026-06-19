@@ -137,7 +137,7 @@ export default function AuthorDashboardPage() {
                           {new Date(manuscript.updatedAt).toLocaleDateString()}
                         </td>
                         <td className="px-4 py-3">
-                          <Link href={`/author/manuscripts/${manuscript._id}`}>
+                          <Link href={`/author/dashboard/${manuscript._id}`}> 
                             <Button size="sm" variant="outline" className="border-journal-maroon text-journal-maroon hover:bg-journal-rose">
                               <Eye className="h-4 w-4 mr-1" />
                               View
