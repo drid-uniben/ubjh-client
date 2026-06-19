@@ -30,6 +30,7 @@ interface ManuscriptReviewDetails {
     status: string;
     revisedPdfFile?: string;
     revisionType?: 'minor' | 'major';
+    revisedFrom?: string;
   };
   reviewType: 'human' | 'reconciliation';
   status: 'in_progress' | 'completed' | 'overdue';
@@ -158,7 +159,7 @@ const [conflictingReviews, setConflictingReviews] = useState<ConflictingReview[]
         }
         
         // Check if revised manuscript
-        if (review.manuscript.revisedPdfFile) {
+        if (review.manuscript.revisedPdfFile || review.manuscript.revisedFrom) {
           setIsRevised(true);
           // Fetch previous review if exists
           const historyResponse = await adminReviewApi.getReviewWithHistory(reviewId);
