@@ -32,7 +32,7 @@ function AuthorLayoutComponent({ children }: AuthorLayoutProps) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
 
-  const dynamicRoutes = ["/author/manuscripts"];
+  const dynamicRoutes = ["/author/dashboard"];
 
   const handleLogout = async () => {
     try {
