@@ -23,6 +23,7 @@ import {
   ArrowUp,
   ArrowDown
 } from 'lucide-react';
+import { SendReviewDialog } from '@/components/admin/SendReviewDialog';
 import { manuscriptReviewApi } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -68,6 +69,9 @@ export default function ManuscriptReviewsPage() {
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [sendReviewTarget, setSendReviewTarget] = useState<{
+  id: string; title: string; reviewers: { id: string; name: string }[];
+} | null>(null);
 
   // Filters
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -167,6 +171,21 @@ export default function ManuscriptReviewsPage() {
     router.push(`/admin/reviews/${manuscriptId}`);
   };
 
+  const openSendReview = async (manuscriptId: string, title: string) => {
+  try {
+    const details = await manuscriptReviewApi.getReviewDetails(manuscriptId);
+    const completed = [...details.data.reviews.human, ...details.data.reviews.reconciliation]
+      .filter((r) => r.status === 'completed' && r.reviewer);
+    setSendReviewTarget({
+      id: manuscriptId,
+      title,
+      reviewers: completed.map((r) => ({ id: r.reviewer._id, name: r.reviewer.name })),
+    });
+  } catch {
+    console.error('Failed to load reviewers for', manuscriptId);
+  }
+};
+
   const getStatusBadge = (status: string, hasDiscrepancy: boolean) => {
     const baseClasses = "inline-flex items-center gap-1 text-xs font-medium";
     
@@ -205,6 +224,14 @@ export default function ManuscriptReviewsPage() {
             <span className="sm:hidden">Recon.</span>
           </div>
         );
+        case 'review_communicated':
+  return (
+    <div className={`${baseClasses} bg-teal-100 text-teal-800 px-2.5 py-1.5 rounded-full`}>
+      <CheckCircle size={14} />
+      <span className="hidden sm:inline">Review Sent</span>
+      <span className="sm:hidden">Sent</span>
+    </div>
+  );
       default:
         return (
           <div className={`${baseClasses} bg-gray-100 text-gray-800 px-2.5 py-1.5 rounded-full`}>
@@ -362,6 +389,7 @@ export default function ManuscriptReviewsPage() {
                     <SelectItem value="under_review">Under Review</SelectItem>
                     <SelectItem value="reviewed">Reviewed</SelectItem>
                     <SelectItem value="in_reconciliation">Reconciliation</SelectItem>
+                    <SelectItem value="review_communicated">Review Communicated</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -571,6 +599,15 @@ export default function ManuscriptReviewsPage() {
                         >
                           <Eye size={14} />
                         </Button>
+                        {manuscript.completedReviews >= 1 && manuscript.status !== 'review_communicated' && (
+  <Button
+    size="sm"
+    onClick={() => openSendReview(manuscript._id, manuscript.title)}
+    className="bg-journal-maroon hover:bg-journal-maroon-dark text-white"
+  >
+    Send Review
+  </Button>
+)}
                       </div>
                     </div>
                   </div>
@@ -612,6 +649,16 @@ export default function ManuscriptReviewsPage() {
           </div>
         )}
       </div>
+      {sendReviewTarget && (
+  <SendReviewDialog
+    open={!!sendReviewTarget}
+    onOpenChange={(open) => !open && setSendReviewTarget(null)}
+    manuscriptId={sendReviewTarget.id}
+    manuscriptTitle={sendReviewTarget.title}
+    reviewers={sendReviewTarget.reviewers}
+    onSent={loadData}
+  />
+)}
     </AdminLayout>
   );
 }

@@ -29,6 +29,7 @@ interface ManuscriptReviewDetails {
     pdfFile?: string;
     revisedPdfFile?: string;
     revisionType?: 'minor' | 'major';
+    revisedFrom?: string;
     status: string;
   };
   reviewType: 'human' | 'reconciliation';
@@ -172,14 +173,13 @@ const [conflictingReviews, setConflictingReviews] = useState<ConflictingReview[]
         }
         
         // Check if revised manuscript
-        if (review.manuscript.revisedPdfFile) {
-          setIsRevised(true);
-          // Fetch previous review if exists
-          const historyResponse = await manuscriptReviewerApi.getReviewWithHistory(reviewId);
-          if (historyResponse.success && historyResponse.data.previousReview) {
-            setPreviousReview(historyResponse.data.previousReview);
-          }
-        }
+        if (review.manuscript.revisedPdfFile || review.manuscript.revisedFrom) {
+  setIsRevised(true);
+  const historyResponse = await manuscriptReviewerApi.getReviewWithHistory(reviewId);
+  if (historyResponse.success && historyResponse.data.previousReview) {
+    setPreviousReview(historyResponse.data.previousReview);
+  }
+}
 
           setCommentsForAuthor(review.comments?.commentsForAuthor || '');
           setConfidentialComments(review.comments?.confidentialCommentsToEditor || '');
