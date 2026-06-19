@@ -85,11 +85,13 @@ export interface Manuscript {
     | "submitted"
     | "under_review"
     | "in_reconciliation"
+    | "review_communicated"
     | "approved"
     | "rejected"
     | "minor_revision"
     | "major_revision"
-    | "revised";
+    | "revised"
+    | "superseded";
   submitter: {
     _id: string;
     name: string;
@@ -105,6 +107,7 @@ export interface Manuscript {
   revisedPdfFile?: string;
   originPdfFile?: string;
   originRevisedPdfFile?: string;
+  revisedFrom?: string;
   createdAt: string;
   updatedAt: string;
   authorRole?: string;
@@ -112,6 +115,9 @@ export interface Manuscript {
   revisionType?: string;
   assignedReviewerCount?: number;
   isReviewProcessCompleted?: boolean;
+  revisionAllowed?: boolean;
+  reviewersForRevision?: string[];
+  supersededBy?: string;
 }
 
 export interface ManuscriptListResponse {
@@ -324,6 +330,7 @@ export interface ReviewDetail {
   reviewer: {
     _id: string;
     name: string;
+    email: string;
   };
   scores: ReviewScores;
   totalScore: number;
@@ -336,6 +343,12 @@ export interface ReviewDetail {
     commentsForAuthor?: string;
     confidentialCommentsToEditor?: string;
   };
+}
+
+export interface SendReviewRequest {
+  allowRevision: boolean;
+  commentsForAuthor: string;
+  reviewerIds?: string[];
 }
 
 export interface ManuscriptReviewDetails {
@@ -725,6 +738,54 @@ export interface OverrideStatusResponse {
   };
 }
 
+export interface PopulatedManuscriptRef {
+  _id: string;
+  title: string;
+  status: string;
+  createdAt: string;
+}
+
+export interface AuthorDashboardManuscript
+  extends Omit<Manuscript, "revisedFrom" | "supersededBy"> {
+  revisedFrom?: PopulatedManuscriptRef | string;
+  supersededBy?: PopulatedManuscriptRef | string;
+  reviewComments?: {
+    commentsForAuthor?: string;
+    confidentialCommentsToEditor?: string;
+  };
+}
+
+export interface AuthorDashboardResponse {
+  success: boolean;
+  data: {
+    profile: {
+      _id: string;
+      name: string;
+      email: string;
+      faculty?: string;
+      affiliation?: string;
+      orcid?: string;
+    };
+    manuscripts: AuthorDashboardManuscript[];
+    stats: { totalManuscripts: number; statusCounts: Record<string, number> };
+    recentManuscript: AuthorDashboardManuscript | null;
+  };
+}
+
+export interface CoAuthorRecord {
+  _id: string;
+  name?: string;
+  email?: string;
+  faculty?: string;
+  affiliation?: string;
+  orcid?: string;
+}
+
+export interface GetCoAuthorsResponse {
+  success: boolean;
+  data: { coAuthors: CoAuthorRecord[]; incompleteCoAuthors: CoAuthorRecord[] };
+}
+
 export interface BackendError {
   message?: string;
   error?: {
@@ -1022,6 +1083,17 @@ export const manuscriptApi = {
       console.error("Manuscript revision failed:", error);
       throw error;
     }
+  },
+  submitPostReviewRevision: async (
+    manuscriptId: string,
+    formData: FormData,
+  ): Promise<ManuscriptSubmissionResponse> => {
+    const response = await api.post(
+      `/revise-manuscript/${manuscriptId}/submit-revision`,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } },
+    );
+    return response.data;
   },
 };
 
@@ -1644,6 +1716,17 @@ export const manuscriptReviewApi = {
       console.error("Failed to fetch review statistics:", error);
       throw error;
     }
+  },
+
+  sendReviewToAuthor: async (
+    manuscriptId: string,
+    data: SendReviewRequest,
+  ): Promise<{ success: boolean; message: string; data: Manuscript }> => {
+    const response = await api.post(
+      `/admin/manuscript-reviews/${manuscriptId}/send-review`,
+      data,
+    );
+    return response.data;
   },
 };
 
@@ -2325,6 +2408,32 @@ export const emailCampaignApi = {
     const response = await api.post("/admin/campaign/send", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+    return response.data;
+  },
+};
+
+export const authorPortalApi = {
+  getDashboard: async (): Promise<AuthorDashboardResponse> => {
+    const response = await api.get("/author/dashboard");
+    return response.data;
+  },
+  getManuscriptDetails: async (
+    manuscriptId: string,
+  ): Promise<{ success: boolean; data: AuthorDashboardManuscript }> => {
+    const response = await api.get(`/author/manuscripts/${manuscriptId}`);
+    return response.data;
+  },
+  getCoAuthors: async (manuscriptId: string): Promise<GetCoAuthorsResponse> => {
+    const response = await api.get(
+      `/co-author/manuscripts/${manuscriptId}/co-authors`,
+    );
+    return response.data;
+  },
+  updateCoAuthor: async (
+    coAuthorId: string,
+    data: Partial<Omit<CoAuthorRecord, "_id">>,
+  ) => {
+    const response = await api.put(`/co-author/co-authors/${coAuthorId}`, data);
     return response.data;
   },
 };

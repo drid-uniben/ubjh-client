@@ -69,6 +69,10 @@ export default function ManuscriptDetailPage() {
         return 'bg-orange-100 text-orange-800 border border-orange-200';
       case 'revised':
         return 'bg-cyan-100 text-cyan-800 border border-cyan-200';
+      case 'Review Communicated':
+        return 'bg-teal-100 text-teal-800 border border-teal-200';
+      case 'Superseded':
+        return 'bg-gray-100 text-gray-500 border border-gray-200';  
       default:
         return 'bg-gray-100 text-gray-800 border border-gray-200';
     }
@@ -84,6 +88,8 @@ export default function ManuscriptDetailPage() {
       minor_revision: 'Minor Revision',
       major_revision: 'Major Revision',
       revised: 'Revised',
+      review_communicated: 'Review Communicated',
+      superseded: 'Superseded',
     };
     
     return statusMap[status] || status;
