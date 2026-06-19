@@ -179,7 +179,11 @@ export default function ManuscriptReviewsPage() {
     setSendReviewTarget({
       id: manuscriptId,
       title,
-      reviewers: completed.map((r) => ({ id: r.reviewer._id, name: r.reviewer.name })),
+      reviewers: completed.map((r) => ({
+        id: r.reviewer._id,
+        name: r.reviewer.name,
+        commentsForAuthor: r.comments?.commentsForAuthor,   // NEW
+      })),
     });
   } catch {
     console.error('Failed to load reviewers for', manuscriptId);
@@ -518,7 +522,7 @@ export default function ManuscriptReviewsPage() {
                         <td className="px-4 sm:px-6 py-4 text-sm text-gray-500">
                           {new Date(manuscript.updatedAt).toLocaleDateString()}
                         </td>
-                        <td className="px-4 sm:px-6 py-4 text-right">
+                        <td className="px-4 sm:px-6 py-4 text-right flex items-center justify-end gap-2">
                           <Button
                             onClick={() => handleViewDetails(manuscript._id)}
                             size="sm"
@@ -528,6 +532,15 @@ export default function ManuscriptReviewsPage() {
                             <Eye size={14} className="mr-1" />
                             View
                           </Button>
+                          {manuscript.completedReviews >= 1 && manuscript.status !== 'review_communicated' && (
+                            <Button
+                              size="sm"
+                              onClick={() => openSendReview(manuscript._id, manuscript.title)}
+                              className="bg-journal-maroon hover:bg-journal-maroon-dark text-white"
+                            >
+                              Send Review
+                            </Button>
+                          )}
                         </td>
                       </tr>
                     ))

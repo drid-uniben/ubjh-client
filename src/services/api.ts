@@ -347,7 +347,7 @@ export interface ReviewDetail {
 
 export interface SendReviewRequest {
   allowRevision: boolean;
-  commentsForAuthor: string;
+  commentsForAuthor?: string;
   reviewerIds?: string[];
 }
 

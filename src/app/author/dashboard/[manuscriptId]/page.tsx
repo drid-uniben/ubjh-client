@@ -13,7 +13,7 @@ import { Loader2, ArrowLeft, Calendar, MessageSquare, UploadCloud, Link2 } from 
 import { AUTHOR_STATUS_LABELS, AUTHOR_STATUS_BADGE_CLASS } from "@/lib/manuscriptStatusDisplay";
 
 export default function AuthorManuscriptDetailPage() {
-  const { id } = useParams();
+  const { manuscriptId } = useParams<{ manuscriptId: string }>();
   const { isAuthenticated } = useAuth();
   const router = useRouter();
 
@@ -23,10 +23,10 @@ export default function AuthorManuscriptDetailPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const loadManuscript = useCallback(async () => {
-    if (!isAuthenticated || !id) return;
+    if (!isAuthenticated || !manuscriptId) return;
     try {
       setIsLoading(true);
-      const response = await authorPortalApi.getManuscriptDetails(id as string);
+      const response = await authorPortalApi.getManuscriptDetails(manuscriptId);
       setManuscript(response.data);
     } catch (error) {
       console.error("Failed to load manuscript:", error);
@@ -34,7 +34,7 @@ export default function AuthorManuscriptDetailPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [isAuthenticated, id]);
+  }, [isAuthenticated, manuscriptId]);
 
   useEffect(() => {
     loadManuscript();
@@ -52,7 +52,7 @@ export default function AuthorManuscriptDetailPage() {
       const response = await manuscriptApi.submitPostReviewRevision(manuscript._id, formData);
       toast.success("Revision submitted successfully.");
       if (response.data?.manuscriptId) {
-        router.push(`/author/manuscripts/${response.data.manuscriptId}`);
+        router.push(`/author/dashboard/${response.data.manuscriptId}`);
       } else {
         loadManuscript();
       }
@@ -97,7 +97,7 @@ export default function AuthorManuscriptDetailPage() {
   return (
     <AuthorLayout>
       <div className="py-6 px-4 sm:px-6 md:px-8 max-w-4xl mx-auto space-y-6">
-        <Button variant="ghost" className="text-journal-maroon" onClick={() => router.back()}>
+        <Button variant="ghost" className="text-journal-maroon" onClick={() => router.push("/author/dashboard")}>
           <ArrowLeft className="h-4 w-4 mr-1" /> Back to Manuscripts
         </Button>
 
@@ -118,12 +118,12 @@ export default function AuthorManuscriptDetailPage() {
             {(previous || next) && (
               <div className="flex flex-wrap gap-3 text-sm">
                 {previous && (
-                  <a href={`/author/manuscripts/${previous.id}`} className="inline-flex items-center gap-1 text-journal-maroon hover:underline">
+                  <a href={`/author/dashboard/${previous.id}`} className="inline-flex items-center gap-1 text-journal-maroon hover:underline">
                     <Link2 className="h-4 w-4" /> View original submission
                   </a>
                 )}
                 {next && (
-                  <a href={`/author/manuscripts/${next.id}`} className="inline-flex items-center gap-1 text-journal-maroon hover:underline">
+                  <a href={`/author/dashboard/${next.id}`} className="inline-flex items-center gap-1 text-journal-maroon hover:underline">
                     <Link2 className="h-4 w-4" /> View your latest revision
                   </a>
                 )}
