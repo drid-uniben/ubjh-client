@@ -880,6 +880,9 @@ const createApi = (baseURL: string): AxiosInstance => {
           "/auth/admin-login",
           "/auth/author-login",
           "/auth/reviewer-login",
+          // The refresh call passes through this interceptor too. If a 401 on it
+          // started another refresh, it would wait on its own promise forever.
+          "/auth/refresh-token",
         ].some((endpoint) => originalRequest.url?.includes(endpoint));
 
         if (isLoginRequest) {
@@ -894,7 +897,9 @@ const createApi = (baseURL: string): AxiosInstance => {
             return api(originalRequest);
           } catch (refreshError) {
             console.error("Error refreshing access token:", refreshError);
-            await handleAuthFailure();
+            if (!isTransientError(refreshError)) {
+              await handleAuthFailure();
+            }
             return Promise.reject(error);
           }
         }
@@ -908,7 +913,9 @@ const createApi = (baseURL: string): AxiosInstance => {
             return api(originalRequest);
           } catch (refreshError) {
             console.error("Error refreshing access token:", refreshError);
-            await handleAuthFailure();
+            if (!isTransientError(refreshError)) {
+              await handleAuthFailure();
+            }
             return Promise.reject(error);
           } finally {
             isRefreshing = false;
@@ -948,6 +955,12 @@ export const refreshAccessToken = async (): Promise<void> => {
     throw error;
   }
 };
+
+// Network failures, rate limits and server errors say nothing about whether the
+// session is still valid, so they must not log the user out.
+const isTransientError = (err: unknown): boolean =>
+  axios.isAxiosError(err) &&
+  (!err.response || err.response.status === 429 || err.response.status >= 500);
 
 let authFailureHandler: (() => Promise<void>) | null = null;
 
